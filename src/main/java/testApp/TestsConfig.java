@@ -19,7 +19,7 @@ public class TestsConfig {
 
         UrlValidator urlValidator = new UrlValidator(schemes);
         if (!urlValidator.isValid(endpoint)){
-            throw new Exception(" ");
+            throw new Exception("Invalid URL");
         }
 
         this.endpoint = endpoint;
