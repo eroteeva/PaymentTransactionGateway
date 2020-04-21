@@ -1,6 +1,9 @@
 package testApp;
 
 import com.google.gson.Gson;
+import testApp.sanity.AbstractTransactionTest;
+import testApp.sanity.ValidPaymentTransaction;
+import testApp.sanity.ValidVoidTransaction;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,8 +11,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PaymentTransactionSanitySuite {
+
     TestsConfig testsConfig;
 
     public PaymentTransactionSanitySuite(TestsConfig testsConfig) {
@@ -18,8 +24,24 @@ public class PaymentTransactionSanitySuite {
 
     protected void executeSanityTests() throws IOException {
 
-        sendValidPaymentTransaction();
+        String endpoint = testsConfig.getEndpoint();
+        List<AbstractTransactionTest> transactionTests = new ArrayList<>();
+        transactionTests.add(new ValidPaymentTransaction());
+        transactionTests.add(new ValidVoidTransaction());
 
+        List<String> errors = new ArrayList<>();
+
+        for (AbstractTransactionTest transactionTest : transactionTests){
+            try {
+                transactionTest.execute(endpoint);
+            } catch (ExecuteTransactionException e) {
+                errors.add(e.getMessage());
+            }
+        }
+
+        for (String error : errors) {
+            System.out.println(error + "\n");
+        }
     }
 
     private void sendValidPaymentTransaction() throws IOException {
@@ -33,7 +55,7 @@ public class PaymentTransactionSanitySuite {
         con.setDoOutput(true);
 
         String jsonInputString = "{\n" +
-                "    \"payment_transaction\": {\n" +
+                "\t\"payment_transaction\": {\n" +
                 "      \"card_number\": \"4200000000000000\",\n" +
                 "      \"cvv\": \"123\",\n" +
                 "      \"expiration_date\": \"06/2019\",\n" +
@@ -43,11 +65,13 @@ public class PaymentTransactionSanitySuite {
                 "      \"card_holder\": \"Panda Panda\",\n" +
                 "      \"email\": \"panda@example.com\",\n" +
                 "      \"address\": \"Panda Street, China\"\n" +
-                "    }";
+                "    }\n" +
+                "}";
 
         OutputStream os = con.getOutputStream();
-        byte[] input = jsonInputString.getBytes("utf-8");
-        os.write(input, 0, input.length);
+        os.write(jsonInputString.getBytes());
+        os.flush();
+        os.close();
 
         int status = con.getResponseCode();
         System.out.println("GET Response Code :: " + status);
@@ -56,7 +80,7 @@ public class PaymentTransactionSanitySuite {
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(con.getInputStream(), "utf-8"));
             StringBuilder response = new StringBuilder();
-            String responseLine = null;
+            String responseLine;
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
