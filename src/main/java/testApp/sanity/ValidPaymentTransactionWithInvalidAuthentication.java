@@ -29,7 +29,7 @@ public class ValidPaymentTransactionWithInvalidAuthentication extends AbstractTr
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("POST");
         con.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-        con.setRequestProperty("Authorization", "Basic Y29kZW1vbnN0ZXI6bXk1ZWNyZXQta2V5Mm8ybw==");
+        con.setRequestProperty("Authorization", "Basic Y29kZW1vbnN0ZXI6bXk1ZWNyZXQt");
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
 

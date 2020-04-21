@@ -11,7 +11,7 @@ public class VoidTransactionToNonexistentPayment extends AbstractTransactionTest
 
     private final String jsonInputString = "{\n" +
             "    \"payment_transaction\": {\n" +
-            "      \"reference_id\": \"0e08644635ccb520cdkjfhlghhg33865660\",\n" +
+            "      \"reference_id\": \"0e08644635ccb520c2eeb88f33865660\",\n" +
             "      \"transaction_type\": \"void\"\n" +
             "    }\n" +
             "}'";
