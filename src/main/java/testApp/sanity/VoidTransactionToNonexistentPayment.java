@@ -1,5 +1,7 @@
 package testApp.sanity;
 
+import testApp.ExecuteTransactionException;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -30,8 +32,11 @@ public class VoidTransactionToNonexistentPayment extends AbstractTransactionTest
         os.close();
 
         int status = con.getResponseCode();
-        System.out.println("GET Response Code :: " + status);
+        System.out.println("POST Response Code :: " + status);
         //check for status 422
+        if (status != 422) {
+            throw new ExecuteTransactionException("When sending a void transaction to a non-existent payment response status 422 was expected, but found: " + status);
+        }
     }
 
 }

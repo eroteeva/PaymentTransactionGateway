@@ -1,5 +1,7 @@
 package testApp.sanity;
 
+import testApp.ExecuteTransactionException;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -27,7 +29,7 @@ public class ValidPaymentTransactionWithInvalidAuthentication extends AbstractTr
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("POST");
         con.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-        con.setRequestProperty("Authorization", "Basic Y29kZW1vbnN0ZXI6bXk1ZWNyZXQta2V5Mm8ybw");
+        con.setRequestProperty("Authorization", "Basic Y29kZW1vbnN0ZXI6bXk1ZWNyZXQta2V5Mm8ybw==");
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
 
@@ -37,8 +39,9 @@ public class ValidPaymentTransactionWithInvalidAuthentication extends AbstractTr
         os.close();
 
         int status = con.getResponseCode();
-        System.out.println("GET Response Code :: " + status);
-        //check for status 401
-
+        System.out.println("POST Response Code :: " + status);
+        if (status != 401) {
+            throw new ExecuteTransactionException("When sending a valid payment transaction with invalid authentication response status 401 was expected, but found: " + status);
+        }
     }
 }

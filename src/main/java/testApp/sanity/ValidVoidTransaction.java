@@ -1,6 +1,7 @@
 package testApp.sanity;
 
 import com.google.gson.Gson;
+import testApp.ExecuteTransactionException;
 import testApp.TransactionResponse;
 
 import java.io.BufferedReader;
@@ -35,7 +36,7 @@ public class ValidVoidTransaction extends AbstractTransactionTest {
         os.close();
 
         int status = con.getResponseCode();
-        System.out.println("GET Response Code :: " + status);
+        System.out.println("POST Response Code :: " + status);
         if (status == HttpURLConnection.HTTP_OK) {
 
             BufferedReader br = new BufferedReader(
@@ -48,7 +49,9 @@ public class ValidVoidTransaction extends AbstractTransactionTest {
             Gson gson = new Gson();
             TransactionResponse transactionResponse = gson.fromJson(response.toString(), TransactionResponse.class);
             if ("approved".equals(transactionResponse.getStatus())) {
-                System.out.println("The transaction has been approved.");
+                System.out.println("When sending a valid void transaction the transaction has been approved.");
+            } else {
+                throw new ExecuteTransactionException("When sending a valid void transaction response status 200 was expected, but found: " + status);
             }
         }
     }
