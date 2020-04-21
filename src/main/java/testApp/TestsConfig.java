@@ -18,7 +18,9 @@ public class TestsConfig {
         String[] schemes = {"http","https"};
 
         UrlValidator urlValidator = new UrlValidator(schemes);
-        if (!urlValidator.isValid(endpoint)){
+        Boolean isValidUrl = endpoint.contains("localhost") || urlValidator.isValid(endpoint);
+
+        if (!isValidUrl){
             throw new Exception("Invalid URL");
         }
 
