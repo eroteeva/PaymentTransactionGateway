@@ -5,11 +5,9 @@ import org.apache.commons.validator.routines.UrlValidator;
 public class TestsConfig {
 
     private String endpoint;
-    private String transactionType;
 
     public TestsConfig(String args[]) throws Exception {
         this.endpoint = args[0];
-        this.transactionType = args[1];
         this.setEndpoint(args[0]);
     }
 
@@ -31,7 +29,4 @@ public class TestsConfig {
         return endpoint;
     }
 
-    public String getTransactionType(){
-        return transactionType;
-    }
 }
