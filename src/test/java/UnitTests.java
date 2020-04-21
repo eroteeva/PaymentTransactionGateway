@@ -24,6 +24,6 @@ public class UnitTests {
             message = e.getMessage();
         }
 
-        Assert.assertEquals(message, "Invalid URL");
+        Assert.assertEquals("Invalid URL", message);
     }
 }
